@@ -18,7 +18,5 @@ while True:
         communication_socket.close()
         print(f"connection with {address} closed")
         break
-    print(f"message from {address} is {message}")
-
-
-
+    else:
+        print(f"{address}:\t{message}")
