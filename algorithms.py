@@ -121,8 +121,8 @@ if __name__ == "__main__":
 
     def main():
         from gcode_manage import decode_gcode
-        
-        decode_gcode()
+        funcions_list = dda, circle
+        decode_gcode(function_list)
 
 
     main()
