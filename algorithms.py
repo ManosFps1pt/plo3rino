@@ -120,7 +120,10 @@ if __name__ == "__main__":
 
 
     def main():
-        gotoPoints(circle(0, 0, 200, format))
+        from gcode_manage import decode_gcode
+        
+        decode_gcode()
+
 
     main()
 

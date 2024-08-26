@@ -10,11 +10,10 @@ client.connect((HOST, PORT))
 
 
 with open("gcode", "r") as file:
-    doc = file.read().split(";")
+    doc = file.read()
 
-for instruction in doc:
-    print(instruction)
-    client.send(instruction.encode("UTF-8"))
+
+client.send(doc.encode("UTF-8"))
 
 client.send(DISCONNECT_MESSAGE.encode("UTF-8"))
 print(send_counter)
