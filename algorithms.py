@@ -87,6 +87,57 @@ def cubic(a, b, c, d, t):
     return lerp(p0, p1, t)
 
 
+def lineH(x0, y0, x1, y1):
+    if x0 > x1:
+        x0, x1 = x1, x0
+        y0, y1 = y1, y0
+
+    dx = x1 - x0
+    dy = y1 - y0
+
+    direction = -1 if dy < 0 else 1
+    dy *= direction
+
+    if dx != 0:
+        y = y0
+        p = 2 * dy - dx
+        for i in range(dx + 1):
+            yield x0 + i, y
+            if p >= 0:
+                y += direction
+                p = p - 2 * dx
+            p = p + 2 * dy
+
+
+def lineV(x0, y0, x1, y1):
+    if y0 > y1:
+        x0, x1 = x1, x0
+        y0, y1 = y1, y0
+
+    dx = x1 - x0
+    dy = y1 - y0
+
+    direction = -1 if dx < 0 else 1
+    dx *= direction
+
+    if dy != 0:
+        x = x0
+        p = 2 * dx - dy
+        for i in range(dx + 1):
+            yield x, y0 + i
+            if p >= 0:
+                x += direction
+                p = p - 2 * dy
+            p = p + 2 * dx
+
+
+def line(x0, y0, x1, y1):
+    if abs(x1 - x0) > abs(y1 - y0):
+        return lineH(x0, y0, x1, y1)
+    else:
+        return lineV(x0, y0, x1, y1)
+
+
 # testing
 if __name__ == "__main__":
     import turtle
@@ -107,7 +158,7 @@ if __name__ == "__main__":
         print("||||| gotoPoints |||||\n")
         if up_to_go:
             for i in points:
-                pen.up()
+                pen.penup()
                 pen.goto(i[0], i[1])
                 goto_counter += 1
                 pen.down()
@@ -120,10 +171,8 @@ if __name__ == "__main__":
 
 
     def main():
-        from gcode_manage import decode_gcode
-        funcions_list = dda, circle
-        decode_gcode(function_list)
-
+        gotoPoints(line(0, 0, 100, 100))
+        gotoPoints(dda(150, 150, 215, 215, format))
+        turtle.mainloop()
 
     main()
-
