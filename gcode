@@ -1,5 +1,4 @@
 start;
-do something;
-do something else;
-do the last thing;
+circle 100 200 300 goto;
+dda 0 0 100 100;
 close;

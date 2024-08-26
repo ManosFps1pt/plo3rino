@@ -1,5 +1,6 @@
 import socket
 
+
 HOST = socket.gethostbyname(socket.gethostname())
 PORT = 4070
 DISCONNECT_MESSAGE = "!DISCONNECT"
