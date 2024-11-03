@@ -9,7 +9,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((HOST, PORT))
 
 
-with open("gcode", "r") as file:
+with open("../gcode", "r") as file:
     doc = file.read()
 
 

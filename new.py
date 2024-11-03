@@ -55,7 +55,7 @@ class Plotter:
             else:
                 self.motor_y.run(abs(move_val), True)
 
-    def calibrate(self):
+    def calibrate(self) -> None:
         self.motor_x.run(4200, True)#3880, True) # far right
         self.motor_y.run(2700, True)#2600, True) # far up
         self.x_pos = 0
@@ -67,7 +67,7 @@ class Plotter:
         if motor.lower() == "x":
             steps = int(val * self.motor_x_steps_cm)
         elif motor.lower() == "y":
-            steps = int(val * self.motor_y_steps_cm)       
+            steps = int(val      * self.motor_y_steps_cm)
         else:
             raise ValueError("not valid motor")
         return steps
@@ -158,7 +158,7 @@ class Plotter:
             self.motor_movement("y", 1000)
             self.goto((3, 3))
         finally:
-            print("motors disabled successfully")
+            print("motor disabled successfully")
             plotter.motor_x.enable(False)
             plotter.motor_y.enable(False)
             self.penup()

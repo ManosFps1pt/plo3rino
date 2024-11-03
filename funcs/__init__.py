@@ -1,0 +1,1 @@
+from funcs.funcs import *
