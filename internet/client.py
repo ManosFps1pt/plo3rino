@@ -1,6 +1,6 @@
 import socket
 
-HOST = "192.168.1.78"
+HOST = "192.168.1.8"
 PORT = 4070
 DISCONNECT_MESSAGE = "!DISCONNECT"
 send_counter = 0

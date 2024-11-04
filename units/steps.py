@@ -15,6 +15,9 @@ class Steps:
         elif self.motor_type == Motor.y:
             return Cm(self.val * self.cm_per_steps_y)
 
+    def __sub__(self, other):
+        return Cm(self.val * other.val)
+
 if __name__ == '__main__':
     var = Steps(3880, Motor.x)
     print(var)
