@@ -1,5 +1,5 @@
 from motor import *
-from units import Steps
+from steps import Steps
 
 
 class Cm:

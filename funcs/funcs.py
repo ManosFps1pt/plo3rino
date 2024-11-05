@@ -63,6 +63,6 @@ def goto_cm_iterable(points: Iterable[tuple[Cm, Cm]]) -> None:
     for i in points:
         goto_cm(i)
 
-a = Steps(1000, Motor.x), Steps(100, Motor.x), Steps(6000, Motor.x)
+# a = Steps(1000, Motor.x), Steps(100, Motor.x), Steps(6000, Motor.x)
 
 print(goto_cm((Cm(3.5), Cm(3.5))))

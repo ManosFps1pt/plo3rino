@@ -16,11 +16,15 @@ class Steps:
             return Cm(self.val * self.cm_per_steps_y)
 
     def __sub__(self, other):
-        return Cm(self.val * other.val)
+        return Cm(self.val - other.val)
+
+
 
 if __name__ == '__main__':
-    var = Steps(3880, Motor.x)
-    print(var)
-    print(var.to_cm())
-    print(var.val)
-    print(var.to_cm().val)
+    var1 = Steps(3880, Motor.x)
+    var2 = Steps(2600, Motor.y)
+    print(var1)
+    print(var1.to_cm())
+    print(var1.val)
+    print(var1.to_cm().val)
+    print(var2 - var1)
