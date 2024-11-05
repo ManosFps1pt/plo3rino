@@ -1,3 +1,5 @@
+import time
+
 def runtime(func):
     def wrapper(*args, **kwargs):
         time1 = time.perf_counter()
@@ -138,41 +140,5 @@ def line(x0, y0, x1, y1):
         return lineV(x0, y0, x1, y1)
 
 
-# testing
-if __name__ == "__main__":
-    import turtle
-    import time
-    import sys
-
-    pen = turtle.Turtle()
-
-    pen.speed(0)
-    turtle.title("plo3rino")
-    goto_counter = 0
-    format = "full"
 
 
-    @runtime
-    def gotoPoints(points, up_to_go=True):
-        global goto_counter
-        print("||||| gotoPoints |||||\n")
-        if up_to_go:
-            for i in points:
-                pen.penup()
-                pen.goto(i[0], i[1])
-                goto_counter += 1
-                pen.down()
-                break
-        for idx, i in enumerate(points):
-            pen.goto(round(i[0]), round(i[1]))
-            goto_counter += 1
-            print(f"{idx}:\t({round(i[0])}, {round(i[1])})")
-        print("\n")
-
-
-    def main():
-        gotoPoints(line(0, 0, 100, 100))
-        gotoPoints(dda(150, 150, 215, 215, format))
-        turtle.mainloop()
-
-    main()
