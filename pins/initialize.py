@@ -1,6 +1,8 @@
-from stepper import StepperMotor
-import RPi.GPIO as GPIO
+from os import getcwd
+print(getcwd())
 
+from myRPi import GPIO
+from mystepper import StepperMotor
 
 
 GPIO.setwarnings(False)
