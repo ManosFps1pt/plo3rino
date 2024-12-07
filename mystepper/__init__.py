@@ -1,1 +1,1 @@
-import StepperMotor
+from mystepper.StepperMotor import *

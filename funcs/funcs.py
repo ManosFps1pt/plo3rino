@@ -1,10 +1,12 @@
+from sympy.physics.units.systems.si import units
+
 from motor import *
 from units import *
 from pins import *
 from typing import Iterable
 
-x_pos: Steps = Steps(0, Motor.x)
-y_pos: Steps = Steps(0, Motor.y)
+x_pos: Unit = Unit(Motor.x, 0, Units.Steps)
+y_pos: Unit = Unit(Motor.y, 0, Units.Steps)
 
 
 def pendown() -> None:
@@ -25,44 +27,41 @@ def calibrate() -> None:
     print("calibrate")
 
 
-def motor_movement(motor: Motor, move_val: Steps) -> None:
+def motor_movement(motor: Motor, move_val: Unit) -> None:
     global x_pos, y_pos
+    print(x_pos, move_val)
     if motor == Motor.x:
-        if move_val.val > 0:
+        if move_val.val(Units.Steps) > 0:
             motor_x.run(move_val.val, False)
             x_pos.val += move_val.val
         else:
-            motor_x.run(abs(move_val.val), True)
+            motor_x.run(abs(move_val.val(Units.Steps)), True)
             x_pos.val -= move_val.val
     if motor == Motor.y:
-        if move_val.val > 0:
+        if move_val.val(Units.Steps) > 0:
             motor_y.run(move_val.val, False)
             y_pos.val += move_val.val
         else:
-            motor_y.run(abs(move_val.val), True)
+            motor_y.run(abs(move_val.val(Units.Steps)), True)
             y_pos.val -= move_val.val
 
-def goto_steps(point: tuple[Steps, Steps] | list[Steps, Steps]) -> None:
+def goto(point: tuple[Unit, Unit] | list[Unit, Unit]) -> None:
     global x_pos, y_pos
     x_target = point[0]
     y_target = point[1]
+    print(f"{x_target=}")
     dx = x_pos - x_target
     dy = y_pos - y_target
     motor_movement(Motor.x, dx)
     motor_movement(Motor.y, dy)
+    print(f"goto {x_target=}, {y_target=}")
 
-def goto_steps_iterable(points: Iterable[tuple[Steps, Steps]]) -> None:
+
+def goto_iterable(points: Iterable[tuple[Unit, Unit]]) -> None:
     for i in points:
-        goto_steps(i)
+        goto(i)
 
-def goto_cm(point: tuple[Cm, Cm] | list[Cm, Cm]) -> None:
-    point_steps: tuple[Steps, Steps] = point[0].to_steps(Motor.x), point[1].to_steps(Motor.y)
-    goto_steps(point_steps)
 
-def goto_cm_iterable(points: Iterable[tuple[Cm, Cm]]) -> None:
-    for i in points:
-        goto_cm(i)
+
 
 # a = Steps(1000, Motor.x), Steps(100, Motor.x), Steps(6000, Motor.x)
-
-print(goto_cm((Cm(3.5), Cm(3.5))))

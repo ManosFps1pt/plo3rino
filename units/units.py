@@ -1,45 +1,57 @@
 from motor import *
+from enum import Enum
 
-class Steps:
-    def __init__(self, val: int, motor_type: Motor):
-        self.val: int = val
-        self.motor_type: Motor = motor_type
-        self.cm_per_steps_x = 3.5 / 3880
-        self.cm_per_steps_y = 3.5 / 2600
+class Units(Enum):
+    Cm: int = 0
+    Steps: int = 1
 
 
-    def to_cm(self) -> Cm:
-        if self.motor_type == Motor.x:
-            return Cm(self.val * self.cm_per_steps_x)
-        elif self.motor_type == Motor.y:
-            return Cm(self.val * self.cm_per_steps_y)
+class Unit:
+    def __init__(self, motor: Motor, value: int | float, unit: Units):
+        self.motor_x_steps = 3880
+        self.motor_y_steps = 2600
+        self.motor_x_cm = 3.5
+        self.motor_y_cm = 3.5
+
+        self.value = value
+        self.motor = motor
+        self.unit = unit
+
+    def val(self, unit: Units) -> int | float:
+        if unit == self.unit:
+            return self.value
+        elif unit == Units.Cm:
+            return (
+                    self.value * self.motor_x_cm
+                    / self.motor_x_steps
+            ) if self.motor == Motor.x else (
+                    self.value * self.motor_y_cm
+                    / self.motor_y_steps
+            )
+        elif unit == Units.Steps:
+            return int( (
+                                self.value * self.motor_x_steps / self.motor_x_cm
+                ) if self.motor == Motor.x else (
+                    self.value * self.motor_y_steps / self.motor_y_cm
+                )
+            )
+        else:
+            raise ValueError("Unsupported unit type")
+
+    def __repr__(self):
+        return f"Unit(motor={self.motor.name}, val={self.value}, unit={self.unit.name})"
 
     def __sub__(self, other):
-        return Cm(self.val - other.val)
-
-
-
-class Cm:
-    def __init__(self, val: int | float):
-        self.val = val
-        self.motor_x_steps_cm = 3880 / 3.5
-        self.motor_y_steps_cm = 2600 / 3.5
-
-    def to_steps(self, motor: Motor) -> Steps:
-        if motor == Motor.x:
-            return Steps(int(self.val * self.motor_x_steps_cm), motor.x)
-        elif motor == Motor.y:
-            return Steps(int(self.val * self.motor_y_steps_cm), motor.y)
-        else:
-            raise ValueError("Unsupported motor type")
+        val1: float = self.val(Units.Cm)
+        if isinstance(other, Unit):
+            val2: float = other.val(Units.Cm)
+        elif isinstance(other, int):
+            val2: float = other
+        return Unit(self.motor, val1 - val2, Units.Cm)
 
 
 
 if __name__ == '__main__':
-    var1 = Steps(3880, Motor.x)
-    var2 = Steps(2600, Motor.y)
-    print(var1)
-    print(var1.to_cm())
-    print(var1.val)
-    print(var1.to_cm().val)
-    print(var2 - var1)
+    x = Unit(Motor.y, 3.5, Units.Cm)
+    print(x.val(Units.Steps))
+

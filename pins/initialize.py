@@ -1,6 +1,3 @@
-from os import getcwd
-print(getcwd())
-
 from myRPi import GPIO
 from mystepper import StepperMotor
 
