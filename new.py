@@ -137,7 +137,7 @@ class Plotter:
             self.pendown()
             self.calibrate()
             sleep(1)
-            print("motor")
+            print("axis")
             self.motor_movement("x", 1000)
             self.motor_movement("y", 1000)
             self.goto((3, 3))

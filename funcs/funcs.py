@@ -1,12 +1,11 @@
-from sympy.physics.units.systems.si import units
-
-from motor import *
+from axis import *
 from units import *
 from pins import *
 from typing import Iterable
 
-x_pos: Unit = Unit(Motor.x, 0, Units.Steps)
-y_pos: Unit = Unit(Motor.y, 0, Units.Steps)
+
+x_pos: Length = Length(Axis.x, 0, Units.Steps)
+y_pos: Length = Length(Axis.y, 0, Units.Steps)
 
 
 def pendown() -> None:
@@ -22,42 +21,43 @@ def calibrate() -> None:
     global x_pos, y_pos
     motor_x.run(4200, True)
     motor_y.run(2700, True)
-    x_pos = 0
-    y_pos = 0
+    x_pos.set_steps(0)
+    y_pos.set_steps(0)
     print("calibrate")
 
 
-def motor_movement(motor: Motor, move_val: Unit) -> None:
+def motor_movement(motor: Axis, move_val: Length) -> None:
     global x_pos, y_pos
     print(x_pos, move_val)
-    if motor == Motor.x:
-        if move_val.val(Units.Steps) > 0:
-            motor_x.run(move_val.val, False)
-            x_pos.val += move_val.val
+    if motor == Axis.x:
+        if move_val.get_steps() > 0:
+            motor_x.run(move_val.get_steps(), False)
+            x_pos += move_val
         else:
-            motor_x.run(abs(move_val.val(Units.Steps)), True)
-            x_pos.val -= move_val.val
-    if motor == Motor.y:
-        if move_val.val(Units.Steps) > 0:
-            motor_y.run(move_val.val, False)
-            y_pos.val += move_val.val
+            motor_x.run(abs(move_val.get_steps()), True)
+            x_pos -= move_val
+    if motor == Axis.y:
+        if move_val.get_steps() > 0:
+            motor_y.run(move_val.get_steps(), False)
+            y_pos += move_val
         else:
-            motor_y.run(abs(move_val.val(Units.Steps)), True)
-            y_pos.val -= move_val.val
+            motor_y.run(abs(move_val.get_steps()), True)
+            y_pos -= move_val
 
-def goto(point: tuple[Unit, Unit] | list[Unit, Unit]) -> None:
+def goto(point: tuple[Length, Length] | list[int, int]) -> None:
     global x_pos, y_pos
     x_target = point[0]
     y_target = point[1]
-    print(f"{x_target=}")
+    x_pos.to_steps()
+    y_pos.to_steps()
     dx = x_pos - x_target
     dy = y_pos - y_target
-    motor_movement(Motor.x, dx)
-    motor_movement(Motor.y, dy)
+    motor_movement(Axis.x, dx)
+    motor_movement(Axis.y, dy)
     print(f"goto {x_target=}, {y_target=}")
 
 
-def goto_iterable(points: Iterable[tuple[Unit, Unit]]) -> None:
+def goto_iterable(points: Iterable[tuple[Length, Length]]) -> None:
     for i in points:
         goto(i)
 
